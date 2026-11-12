@@ -118,16 +118,20 @@ function destroyWallpaper() {
 let lastBarArea = '';
 let lastWindows = '';
 let barTimer = null;
+let barBusy = false;   // ignore the work-area echo our own AppBar update triggers
 function placeBar(force = false) {
-  if (!alive('bar')) return;
+  if (!alive('bar') || barBusy) return;
   const w = wins.bar;
   const { bounds: b, workArea: wa, scaleFactor: sf } = primary();
   if (isWin && settings.get().shell.reserve) {
     const area = { left: Math.round(b.x * sf), top: Math.round(wa.y * sf), bottom: Math.round((wa.y + wa.height) * sf) };
     const key = JSON.stringify([area, sf]);
-    if (!force && key === lastBarArea) return;
+    if (!force && key === lastBarArea) return;   // nothing changed -> never re-reserve (prevents the feedback loop)
     lastBarArea = key;
-    if (!native.appbarSet(native.hwndOf(w), Math.round(BAR_W * sf), area, APPBAR_MSG)) w.setBounds({ x: b.x, y: wa.y, width: BAR_W, height: wa.height });
+    barBusy = true;
+    const ok = native.appbarSet(native.hwndOf(w), Math.round(BAR_W * sf), area, APPBAR_MSG);
+    if (!ok) w.setBounds({ x: b.x, y: wa.y, width: BAR_W, height: wa.height });
+    setTimeout(() => { barBusy = false; }, 500);  // swallow the ABN_POSCHANGED echo
   } else {
     w.setBounds({ x: b.x, y: wa.y, width: BAR_W, height: wa.height });
   }
@@ -281,10 +285,14 @@ function rebuildShell() {
 }
 
 let displayKey = '';
+let geomTimer = null;
 function onDisplayChange() {
   const d = primary();
+  // Only a real display change (resolution, DPI, monitor add/remove) rebuilds the shell.
+  // A work-area-only change (our own AppBar, the taskbar auto-hiding) just re-reads geometry,
+  // debounced so a burst of events can't churn the layout.
   const key = JSON.stringify([d.id, d.bounds, d.scaleFactor, d.rotation, screen.getAllDisplays().length]);
-  if (key === displayKey) return computeGeometry();
+  if (key === displayKey) { clearTimeout(geomTimer); geomTimer = setTimeout(computeGeometry, 250); return; }
   displayKey = key;
   rebuildShell();
 }

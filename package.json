@@ -1,7 +1,7 @@
 {
   "name": "mist-desktop",
   "productName": "Mist",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Minimalist desktop shell and PC optimizer for Windows",
   "main": "main/main.js",
   "author": "Kozy",
