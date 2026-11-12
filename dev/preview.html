@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><title>Mist Vorschau</title>
+<style>
+  html,body{margin:0;height:100%;background:#000;overflow:hidden}
+  .desk{position:relative;width:1600px;height:900px;transform-origin:0 0}
+  iframe{position:absolute;border:0;background:transparent}
+</style></head><body>
+<div class="desk" id="d">
+  <iframe id="wp" style="inset:0;width:1600px;height:900px"></iframe>
+  <iframe id="bar" style="left:0;top:0;width:56px;height:900px"></iframe>
+  <iframe id="dash" style="left:370px;top:0;width:980px;height:480px" allowtransparency="true"></iframe>
+</div>
+<script>
+  const q = location.search.includes('dark') ? '?theme=dark' : '?theme=light';
+  const show = new URLSearchParams(location.search).get('show') || 'dashboard';
+  wp.src = '../renderer/index.html' + q + '#wallpaper';
+  bar.src = '../renderer/index.html' + q + '#bar';
+  if (show === 'none') dash.remove();
+  else if (show === 'launcher') { dash.style.cssText = 'left:520px;top:160px;width:640px;height:500px'; dash.src = '../renderer/index.html' + q + '#launcher'; }
+  else if (show === 'power') { dash.style.cssText = 'left:60px;top:576px;width:236px;height:316px'; dash.src = '../renderer/index.html' + q + '#power'; }
+  else dash.src = '../renderer/index.html' + q + '#dashboard';
+  const fit = () => { const s = Math.min(innerWidth / 1600, innerHeight / 900); d.style.transform = `scale(${s})`; };
+  fit(); addEventListener('resize', fit);
+</script></body></html>
