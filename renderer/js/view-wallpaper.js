@@ -9,13 +9,19 @@ Views.wallpaper = async function (root, settings) {
 
   function layout() {
     const sh = s.shell;
-    const gap = sh.frame ? 8 : 0;
-    const left = geo.barWidth ? Math.max(geo.left, geo.barWidth) : geo.left + gap;
-    frame.style.left = (left + (geo.barWidth && sh.frame ? 2 : 0)) + 'px';
+    if (!sh.frame) {
+      // Fullscreen: fill the whole monitor edge to edge (the bar sits on top).
+      frame.style.left = frame.style.top = frame.style.right = frame.style.bottom = '0';
+      frame.classList.remove('framed');
+      return;
+    }
+    const gap = 8;
+    const left = (geo.barWidth ? Math.max(geo.left, geo.barWidth) : geo.left) + gap;
+    frame.style.left = (left + (geo.barWidth ? 2 : 0)) + 'px';
     frame.style.top = (geo.top + gap) + 'px';
     frame.style.right = (geo.right + gap) + 'px';
     frame.style.bottom = (geo.bottom + gap) + 'px';
-    frame.classList.toggle('framed', !!sh.frame);
+    frame.classList.add('framed');
   }
 
   function render() {

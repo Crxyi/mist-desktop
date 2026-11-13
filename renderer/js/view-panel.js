@@ -382,7 +382,7 @@ Views.panel = async function (root, settings) {
         ${row('bar', 'Sidebar', 'Vertical bar on the left with clock, window title and quick access.', sh.bar, !sh.enabled)}
         ${row('reserve', 'Reserve space for the bar', 'Maximized windows start to the right of the bar. Released when you quit.', sh.reserve, !sh.enabled || !sh.bar)}
         ${row('wallpaper', 'Mist wallpaper', 'Own wallpaper with a frame. Your Windows wallpaper stays unchanged.', sh.wallpaper, !sh.enabled)}
-        ${row('frame', 'Rounded frame', 'The wallpaper is inset with rounded corners – like in the video.', sh.frame, !sh.enabled || !sh.wallpaper)}
+        ${row('frame', 'Rounded frame', 'On: wallpaper inset with rounded corners (like the video). Off: fullscreen, edge to edge.', sh.frame, !sh.enabled || !sh.wallpaper)}
         ${row('anim', 'Drifting mist', 'Mist slowly drifts across (very light load).', s.wallpaperAnimate, !sh.enabled || !sh.wallpaper)}
         ${row('hideIcons', 'Hide desktop icons', 'Only while Mist is running – the icons are kept.', sh.hideIcons, !sh.enabled || !sh.wallpaper)}
         <div class="setrow"><div class="tx"><b>Animations</b><small>Smooth transitions like in the video. Off = everything appears instantly.</small></div>${UI.toggle(s.motion !== false, 'data-x="motion"')}</div>
