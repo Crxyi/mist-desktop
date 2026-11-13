@@ -124,14 +124,18 @@ function placeBar(force = false) {
   const w = wins.bar;
   const { bounds: b, workArea: wa, scaleFactor: sf } = primary();
   if (isWin && settings.get().shell.reserve) {
-    const area = { left: Math.round(b.x * sf), top: Math.round(wa.y * sf), bottom: Math.round((wa.y + wa.height) * sf) };
+    // Reserve against the fixed MONITOR BOUNDS, never the work area. If the rect depended on
+    // the work area, the taskbar auto-hiding (or any other AppBar) would change it, we'd
+    // re-reserve, which changes the work area again -> the jitter. Bounds never move, so the
+    // key stays constant and we reserve exactly once.
+    const area = { left: Math.round(b.x * sf), top: Math.round(b.y * sf), bottom: Math.round((b.y + b.height) * sf) };
     const key = JSON.stringify([area, sf]);
-    if (!force && key === lastBarArea) return;   // nothing changed -> never re-reserve (prevents the feedback loop)
+    if (!force && key === lastBarArea) return;
     lastBarArea = key;
     barBusy = true;
     const ok = native.appbarSet(native.hwndOf(w), Math.round(BAR_W * sf), area, APPBAR_MSG);
     if (!ok) w.setBounds({ x: b.x, y: wa.y, width: BAR_W, height: wa.height });
-    setTimeout(() => { barBusy = false; }, 500);  // swallow the ABN_POSCHANGED echo
+    setTimeout(() => { barBusy = false; }, 600);  // swallow the ABN_POSCHANGED echo our own update triggers
   } else {
     w.setBounds({ x: b.x, y: wa.y, width: BAR_W, height: wa.height });
   }

@@ -8,7 +8,7 @@
   const GB = 1024 ** 3;
   let s = {
     theme: new URLSearchParams(location.search).get('theme') || 'light', wallpaper: 'torii', wallpaperPath: '', wallpaperAnimate: true,
-    shell: { enabled: true, bar: true, reserve: true, wallpaper: true, wallpaperMode: 'desktop', frame: true, hideIcons: false, hotEdge: true, taskbar: 'autohide', windows: true },
+    shell: { enabled: true, bar: true, reserve: true, wallpaper: true, wallpaperMode: 'desktop', frame: true, hideIcons: false, hotEdge: true, taskbar: 'show', windows: true },
     clock24: true, motion: true, city: 'Berlin', geo: { lat: 52.52, lon: 13.4, label: 'Berlin, DE' }, autostart: false, tweaksOriginal: { gamemode: [1] }, powerOriginal: null, taskbarOriginal: 40,
     history: [
       { t: Date.now() - 600000, text: 'Quick optimize: 1.2 GB storage, 640 MB RAM', kind: 'quick' },

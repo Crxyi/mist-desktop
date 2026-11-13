@@ -8,7 +8,7 @@ const DEFAULTS = {
   wallpaper: 'torii',
   wallpaperPath: '',
   wallpaperAnimate: true,
-  shell: { enabled: true, bar: true, reserve: true, wallpaper: true, wallpaperMode: 'desktop', frame: true, hideIcons: false, hotEdge: true, taskbar: 'autohide', windows: true },
+  shell: { enabled: true, bar: true, reserve: true, wallpaper: true, wallpaperMode: 'desktop', frame: true, hideIcons: false, hotEdge: true, taskbar: 'show', windows: true },
   clock24: true,
   motion: true,
   city: 'Berlin',
